@@ -1,14 +1,14 @@
 #ifndef TYPES_
 #define TYPES_
 
-typedef enum tipos{
+typedef enum types{
     CHAR,
     INT,
     STRING,
     DOUBLE,
     FUNCTION,
     LIST
-} Tipo;
+} Type;
 
 typedef union contents{
     char c;
@@ -16,17 +16,18 @@ typedef union contents{
     char *s;
     double d;
     char *f;
+    Stack l; 
 } Content;
 
 
-typedef struct conteudo{
-    Tipo tipo;
+typedef struct elements{
+    Type type;
     Content content;
 }Element;
 
-typedef struct stack {
+typedef struct stacks {
     Element element;
-    struct llist *stack;
+    struct stacks *next;
 } *Stack;
 
 
