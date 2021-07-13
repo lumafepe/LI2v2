@@ -1,9 +1,10 @@
 #include "types.h"
 #include "opperations_in_stack.h"
 #include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-
-void addElem(Stack *next,Element element){
+void pushElement(Stack *next,Element element){
     Stack a = malloc(sizeof(struct stacks));
     a->next = *next;
     a->element=element;
@@ -11,14 +12,14 @@ void addElem(Stack *next,Element element){
 }
 
 
-void push(Stack *stack,Type type,...){
+Element generateElement(Type type,...){
     va_list ap;
     va_start(ap, type);
     Element element;
     element.type=type;
     switch(type){
         case CHAR:
-            element.content.c = va_arg(ap,char);
+            element.content.c = (char) va_arg(ap,int);
             break;
         case INT:
             element.content.i = va_arg(ap,int);
@@ -36,11 +37,20 @@ void push(Stack *stack,Type type,...){
             element.content.f = va_arg(ap,char *);
             break;
         default:
-            fprintf("ERROR in push");
+            printf("ERROR in generateElement");
     }
-    addElem(stack,element);
+    va_end(ap);
+    return element;
+}
+
+void push(Stack *stack,Type type,...){
+    va_list ap;
+    va_start(ap, type);
+    Element element = generateElement(type,ap);
+    pushElement(stack,element);
     va_end(ap);
 }
+
 
 Element pop(Stack *stack){
     Element element = (*stack)->element;
@@ -50,27 +60,58 @@ Element pop(Stack *stack){
     return element;
 }
 
-void printStack(Stack *stack){
-    switch((*stack)->element.type){
-        case CHAR:
-            printf("%c",(*stack)->element.content.c);
-            break;
-        case INT:
-            printf("%d",(*stack)->element.content.i);
-            break;
-        case STRING:
-            printf("%s",(*stack)->element.content.s);
-            break;
-        case DOUBLE:
-            printf("%g",(*stack)->element.content.d);
-            break;
-        case LIST:
-            printStack((*stack)->element.content.l);
-            break;
-        case FUNCTION:
-            printf("{%s}",(*stack)->element.content.f);
-            break;
-        default:
-            fprintf("ERROR in printStack");
+
+
+void printElement(Element element){
+    switch(element.type){
+            case CHAR:
+                printf("%c",element.content.c);
+                break;
+            case INT:
+                printf("%d",element.content.i);
+                break;
+            case STRING:
+                printf("%s",element.content.s);
+                break;
+            case DOUBLE:
+                printf("%g",element.content.d);
+                break;
+            case LIST:
+                printStack(element.content.l);
+                break;
+            case FUNCTION:
+                printf("{%s}",element.content.f);
+                break;
+            default:
+                printf("ERROR in printElement");
+        }
+}
+
+void printStack(Stack stack){
+    if(stack){
+        printStack(stack->next);
+        printElement(stack->element);
+    }
+}
+Element * generateVariables(){
+    Element *variables = malloc(26*sizeof(struct elements));
+    variables['A'-65]=generateElement(INT,10);
+    variables['B'-65]=generateElement(INT,11);
+    variables['C'-65]=generateElement(INT,12);
+    variables['D'-65]=generateElement(INT,13);
+    variables['E'-65]=generateElement(INT,14);
+    variables['F'-65]=generateElement(INT,15);
+    variables['N'-65]=generateElement(CHAR,'\n');
+    variables['S'-65]=generateElement(CHAR,' ');
+    variables['X'-65]=generateElement(INT,0);
+    variables['Y'-65]=generateElement(INT,1);
+    variables['Z'-65]=generateElement(INT,2);
+    return variables;
+}
+
+void destroy(Stack *stack){
+    if(*stack){
+        destroy((*stack)->next);
+        free(*stack);
     }
 }

@@ -16,14 +16,15 @@ typedef union contents{
     char *s;
     double d;
     char *f;
-    Stack l; 
+    struct stacks *l; 
 } Content;
-
 
 typedef struct elements{
     Type type;
     Content content;
 }Element;
+
+
 
 typedef struct stacks {
     Element element;

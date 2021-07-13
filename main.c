@@ -1,11 +1,10 @@
 #include "types.h"
 #include "opperations_in_stack.h"
+#include <stdlib.h>
+
 
 int main(){
-
-    Stack stack;
-    push(&stack,INT,15);
-    push(&stack,INT,10);
+    Stack stack=NULL;
     printStack(stack);
     return 0;
 }

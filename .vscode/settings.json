@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "types.h": "c",
-        "stdarg.h": "c"
+        "stdarg.h": "c",
+        "opperations_in_stack.h": "c",
+        "stdlib.h": "c"
     }
 }
